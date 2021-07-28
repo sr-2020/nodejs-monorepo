@@ -1,5 +1,6 @@
 import {
   absoluteDeathAbility,
+  absoluteDeathVr,
   activateSoft,
   alloHomorusAbility,
   arrowgant,
@@ -11,6 +12,7 @@ import {
   celestialSong,
   changeAuraAbility,
   changeAuraSpiritAbility,
+  clinicalDeathVr,
   cloudMemoryAbility,
   dobirds,
   dummyAbility,
@@ -3819,32 +3821,45 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'black-ice-ai',
     humanReadableName: 'Черный лед',
     description:
-      'Ты можешь убивать в Клиническую смерть. Применение требует траты Позитива (заверь у мастера). Отсканируй QR персонажа в VR, он должен немедленно выйти из  VR. После возвращения в тело с ним случится КС.',
+      'Ты можешь убивать в Клиническую смерть. Применение требует траты Позитива (заверь у мастера). Отсканируй QR персонажа в VR, он должен немедленно выйти из VR. После возвращения в тело с ним случится КС.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        field: 'targetCharacterId',
+        allowedTypes: ['VR_BODY'],
+      },
+
+    ],
     cooldownMinutes: (character) => 120,
     prerequisites: ['arch-digital', 'sub-ai'],
     availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: clinicalDeathVr.name,
   },
   // Штука должна работать и на хотсим (техноманты) и на колдсим (все остальные).  В колдсиме персонаж в аватарке - надо подумать. можно ли это закодить. Либо можно делать это через мастера, Потому что Позитив все равно у нас на бусинах и ручном контроле
   {
     id: 'storm-blast-ai',
     humanReadableName: 'Цифровой шторм',
     description:
-      'Ты можешь убивать в Абсолютную смерть. Применение требует траты Позитива (заверь у мастера). Отсканируй QR персонажа в VR, он должен немедленно выйти из  VR. После возвращения в тело с ним случится АС.',
+      'Ты можешь убивать в Абсолютную смерть. Применение требует траты Позитива (заверь у мастера). Отсканируй QR персонажа в VR, он должен немедленно выйти из VR. После возвращения в тело с ним случится АС.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        field: 'targetCharacterId',
+        allowedTypes: ['VR_BODY'],
+      },
+    ],
     cooldownMinutes: (character) => 240,
     prerequisites: ['arch-digital', 'black-ice-ai'],
     availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: absoluteDeathVr.name,
   },
   // Время действия 80 минут. Аура цели на это время случайным образом меняется на 30% (и случайный фрагмент, и на случайное значение).
   {

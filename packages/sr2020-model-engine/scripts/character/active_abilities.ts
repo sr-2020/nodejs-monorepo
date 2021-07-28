@@ -7,7 +7,7 @@ import {
   modifierFromEffect,
   sendNotificationAndHistoryRecord,
 } from './util';
-import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
+import { absoluteDeath, absoluteDeathUnchecked, clinicalDeath, clinicalDeathUnchecked, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
 import * as uuid from 'uuid';
 
@@ -574,6 +574,14 @@ export function externalAbility(api: EventModelApi<Sr2020Character>, data: Activ
 
 export function marauderAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, clinicalDeath, data);
+}
+
+export function clinicalDeathVr(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, clinicalDeathUnchecked, { location: data.location });
+}
+
+export function absoluteDeathVr(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, absoluteDeathUnchecked, { location: data.location });
 }
 
 function getBodyStorageContent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
