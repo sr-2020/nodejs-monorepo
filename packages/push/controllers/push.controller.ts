@@ -28,6 +28,9 @@ export class PushController implements PushService {
     if (!receiverToken) {
       return { success: 0, failure: 1 };
     }
+
+    console.log(`Sending notification with title ${notification.title} and body ${notification.body} to character ${id}`);
+
     const sendResult = await this.firebaseService.send(receiverToken.token, notification.title, notification.body);
     return { ...sendResult, token_used: receiverToken.token };
   }
