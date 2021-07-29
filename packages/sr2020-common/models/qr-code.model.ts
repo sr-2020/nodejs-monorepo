@@ -63,6 +63,7 @@ export const kMerchandiseQrTypes: QrType[] = [
   'armour',
   'weapon',
   'artifact',
+  'spirit_jar',
 ];
 
 @Entity({
