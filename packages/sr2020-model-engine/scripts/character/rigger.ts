@@ -222,7 +222,7 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
 
   const m = findInDroneModifier(api);
   api.sendOutboundEvent(QrCode, m.droneQrId, stopUsingDroneOrSpirit, {
-    activeAbilities: api.workModel.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id)),
+    activeAbilities: api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id)),
     broken: m.broken,
   });
 
