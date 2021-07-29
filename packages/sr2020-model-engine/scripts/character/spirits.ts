@@ -41,6 +41,10 @@ export function enterSpirit(api: EventModelApi<Sr2020Character>, data: Spirit & 
     throw new UserVisibleError('Для входа в духа необходимо быть в мясном теле.');
   }
 
+  if (api.workModel.healthState != 'healthy') {
+    throw new UserVisibleError('Для входа в духа необходимо быть здоровым.');
+  }
+
   data.abilityIds = [...data.abilityIds, ...kCommonSpiritAbilityIds];
   for (const id of data.abilityIds) {
     addFeatureToModel(api.model, id);

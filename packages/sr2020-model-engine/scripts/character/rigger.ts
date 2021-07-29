@@ -165,6 +165,10 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Для подключения к дрону необходимо быть в мясном теле.');
   }
 
+  if (api.workModel.healthState != 'healthy') {
+    throw new UserVisibleError('Для входа в дрона необходимо быть здоровым.');
+  }
+
   const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
   if (drone.broken) {
     throw new UserVisibleError('Ты не можешь подключитсья к этому дрону, он сломан.');

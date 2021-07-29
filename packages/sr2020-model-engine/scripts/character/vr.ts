@@ -31,6 +31,10 @@ export function enterVr(api: EventModelApi<Sr2020Character>, data: ActiveAbility
     throw new UserVisibleError('Для входа в VR необходимо быть в мясном теле.');
   }
 
+  if (api.workModel.healthState != 'healthy') {
+    throw new UserVisibleError('Для входа в VR необходимо быть здоровым.');
+  }
+
   const timeInVr = duration(api.workModel.maxTimeInVr, 'minutes');
   api.setTimer(
     kVrTimerIds[0],
