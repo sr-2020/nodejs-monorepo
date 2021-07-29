@@ -2,6 +2,7 @@ import { EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/m
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { createClampingEffect, createCooldownCalculatorEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 import { addFadingDecreaseTimer, kFadingDecreaseTimerName } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+import { addFeature, removeFeature } from '@alice/sr2020-model-engine/scripts/character/features';
 
 // Migrates to updated character model (e.g. sets some optional fields to the default values).
 export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: never) {
@@ -34,6 +35,13 @@ export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: ne
 
   if (!api.getTimer(kFadingDecreaseTimerName)) {
     addFadingDecreaseTimer(api.model);
+  }
+
+  for (const id of ['how-much-it-costs', 'who-needs-it', 'how-much-is-rent', 'let-him-pay', 're-rent', 'save-scoring']) {
+    if (api.model.activeAbilities.find((ability) => ability.id == id)) {
+      removeFeature(api,{id});
+      addFeature(api, {id});
+    }
   }
 }
 
