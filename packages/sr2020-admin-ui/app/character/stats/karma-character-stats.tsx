@@ -33,6 +33,11 @@ export class KarmaCharacterStats extends React.Component<{ karma: Karma }> {
                 <td>karma.cycleLimit</td>
                 <td>{this.props.karma.cycleLimit}</td>
               </tr>
+              <tr>
+                <th>Лимит на игру</th>
+                <td>karma.gameLimit</td>
+                <td>{this.props.karma.gameLimit}</td>
+              </tr>
             </tbody>
           </Table>
         </Accordion.Collapse>

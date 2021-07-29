@@ -15,7 +15,7 @@ import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
 import { setRaceForModel } from '@alice/sr2020-model-engine/scripts/character/races';
 import { addFeatureToModel, getAllAvailableFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
-import { addKarmaGivingTimer, kMaxKarmaPerCycle } from '@alice/sr2020-model-engine/scripts/character/karma';
+import { addKarmaGivingTimer, kMaxKarmaPerCycle, kMaxKarmaPerGame } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { createJackedInEffect } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { templateSettings } from 'lodash';
 import * as Chance from 'chance';
@@ -223,6 +223,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         spent: 0,
         spentOnPassives: 0,
         cycleLimit: kMaxKarmaPerCycle,
+        gameLimit: kMaxKarmaPerGame,
       },
       screens: {
         billing: true,

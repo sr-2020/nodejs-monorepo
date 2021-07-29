@@ -557,6 +557,10 @@ export class Karma {
   @NumberProperty()
   @Column({ default: 0, type: 'numeric', precision: 8, scale: 2, transformer: new ColumnNumericTransformer() })
   cycleLimit: number;
+
+  @NumberProperty()
+  @Column({ default: 500, type: 'numeric', precision: 8, scale: 2, transformer: new ColumnNumericTransformer() })
+  gameLimit: number;
 }
 
 export class Screens {
