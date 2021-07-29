@@ -3,7 +3,6 @@ import { TestFixture } from './fixture';
 import { duration } from 'moment';
 import { calculateMagicFeedback } from '@alice/sr2020-model-engine/scripts/character/spells';
 import { HealthState } from '@alice/sr2020-common/models/sr2020-character.model';
-import { addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 
 describe('Spells', function () {
   let fixture: TestFixture;
@@ -1216,5 +1215,27 @@ describe('Spells', function () {
 
       expect(feedback).toMatchObject({ amount: 0, duration: 6 });
     });
+  });
+
+  it('Focus copy-paste', async () => {
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent(
+      {
+        eventType: 'createMerchandise',
+        data: { id: 'asparagus', name: '', description: '' },
+      },
+      '1',
+    );
+
+    {
+      const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'markAsUsed', data: {} }, '1');
+      expect(workModel.type).toEqual('focus_on_cooldown');
+    }
+
+    await fixture.sendQrCodeEvent({ eventType: 'pasteAnother', data: { qrCodeId: '1' } }, '2');
+
+    expect((await fixture.getQrCode('1')).workModel.type).toEqual('empty');
+    expect((await fixture.getQrCode('2')).workModel.type).toEqual('focus');
   });
 });

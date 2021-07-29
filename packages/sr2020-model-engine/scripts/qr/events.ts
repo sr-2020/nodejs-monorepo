@@ -326,3 +326,23 @@ export function addTemporaryQrModifier(api: EventModelApi<QrCode>, m: Modifier, 
 export function removeQrModifier(api: EventModelApi<QrCode>, data: { mID: string }) {
   api.removeModifier(data.mID);
 }
+
+export function cleanModifiersAndTimersAndCallback(api: EventModelApi<QrCode>, data: { qrCodeId: string }) {
+  api.model.modifiers = [];
+  api.model.timers = [];
+  api.sendOutboundEvent(QrCode, data.qrCodeId, pasteAnotherImpl, { qrCodeId: api.model.modelId });
+}
+
+export function pasteAnother(api: EventModelApi<QrCode>, data: { qrCodeId: string }) {
+  if (api.model.type != 'empty') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  api.sendOutboundEvent(QrCode, data.qrCodeId, cleanModifiersAndTimersAndCallback, { qrCodeId: api.model.modelId });
+}
+
+export function pasteAnotherImpl(api: EventModelApi<QrCode>, data: { qrCodeId: string }) {
+  api.model = { ...api.aquired(QrCode, data.qrCodeId), modelId: api.model.modelId };
+
+  api.sendOutboundEvent(QrCode, data.qrCodeId, clear, {});
+}
