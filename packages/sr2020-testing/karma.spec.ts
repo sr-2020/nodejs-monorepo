@@ -110,6 +110,19 @@ describe('Karma events', function () {
     });
   });
 
+  it('Can have more than game limit', async () => {
+    await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 100, gameLimit: 500 } });
+
+    for (let i = 0; i < 10; ++i) {
+      await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 900 } });
+      await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
+    }
+
+    expect((await fixture.getCharacter()).baseModel.karma).toMatchObject({
+      available: 1500,
+    });
+  });
+
   it('Can buy feature for karma', async () => {
     await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });

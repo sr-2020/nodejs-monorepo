@@ -36,12 +36,11 @@ export function earnKarma(api: EventModelApi<Sr2020Character>, data: { amount: n
 
   api.model.karma.available += amountEarned;
   api.model.karma.cycleLimit -= amountEarned;
+  api.model.karma.gameLimit -= amountEarned;
 }
 
 export function resetKarmaCycleLimit(api: EventModelApi<Sr2020Character>, data: {}) {
-  const totalKarmaEarned = api.model.karma.spent + api.model.karma.available;
-  const gameKarmaLimit = Math.max(kMaxKarmaPerGame - totalKarmaEarned, 0);
-  api.model.karma.cycleLimit = Math.min(gameKarmaLimit, kMaxKarmaPerCycle);
+  api.model.karma.cycleLimit = Math.min(api.model.karma.gameLimit, kMaxKarmaPerCycle);
 }
 
 export function addKarmaGivingTimer(model: Sr2020Character) {
