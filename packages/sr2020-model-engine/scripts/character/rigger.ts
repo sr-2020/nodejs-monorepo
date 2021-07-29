@@ -270,7 +270,7 @@ export function cyberdeckRepairAbility(api: EventModelApi<Sr2020Character>, data
 
   const cyberdeckRepairSkill = api.model.drones.recoverySkill + typedQrData<RepairKitQrData>(api.aquired(QrCode, data.qrCodeId!)).bonus;
   if (cyberdeckRepairSkill < 22) {
-   throw new UserVisibleError('Ремонт не удался.');
+    throw new UserVisibleError('Ремонт не удался.');
   }
 
   api.sendOutboundEvent(QrCode, data.droneId!, repairCyberdeck, {});
@@ -337,7 +337,6 @@ export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneMo
   api.model.currentBody = 'drone';
   api.model.maxHp = m.hp;
   api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
-//  api.model.screens.billing = false;
   api.model.screens.spellbook = false;
   api.model.screens.implants = false;
   api.model.screens.ethics = false;
