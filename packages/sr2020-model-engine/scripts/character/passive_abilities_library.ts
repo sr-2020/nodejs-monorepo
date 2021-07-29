@@ -360,7 +360,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Всегда на связи',
     description:
       'Пока ваш персонаж жив и не находится под запрещающим использовать связь ментальным контролем, вы можете писать сообщения в телеграмм, даже если вы связаны или без сознания. Если у окружающих возникают к вам вопросы, продемонстрируйте им наличие у вас этой способности.',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['media-person'],
     modifier: [],
@@ -371,7 +371,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Последний репортаж',
     description:
       'Эта способность сработает только если вашм персонаж был добит в КС. Вы можете записать на камеру рассказ про последние 15 минут вашей жизни, даже если вы были без сознания и чего-то не видели - можете это описать.\r\nЗапись можно выложить в любой канал, где у вас остались права на размещение материалов или послать кому-то личным сообщением.',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['media-person'],
     modifier: [],
@@ -1317,9 +1317,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
-    modifier: [
-      modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
-    ],
+    modifier: [modifierFromEffect(increaseMedicraftBonus, { amount: 4 })],
   },
   // drones.medicraftBonus +4
   {
@@ -1329,9 +1327,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-rigger', 'medicraft-1'],
-    modifier: [
-      modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
-    ],
+    modifier: [modifierFromEffect(increaseMedicraftBonus, { amount: 4 })],
   },
   // drones.medicraftBonus +6
   // drones.aircraftBonus = +1
@@ -3168,7 +3164,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'sword-short-doubled',
     humanReadableName: 'Спрайт два меча',
-    description: 'Ты можешь использовать два одноручных меча в Красной комнате',
+    description: 'Ты можешь использовать два одноручных меча  в Красной комнате',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
@@ -3984,7 +3980,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты находишься в астральном плане. Необходимый маркер: красный дождевик.\nТы видишь и слышишь реальный мир, но не можешь воздействовать на него.\nИз реального мира тебя не воспринимают и никак не могут атаковать (если только у них нет абилки, которая явным образом утверждает иное).',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -3994,7 +3990,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: HammerTime',
     description: 'Можешь взять одноручное холодное оружие до 100см, оно считается тяжёлым.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4004,7 +4000,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: Adamantaeu',
     description: 'На тебя действует эффект тяжёлой брони.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4014,7 +4010,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: Fireball - back',
     description: 'Можешь кинуть 3 огненных шара. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4024,7 +4020,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: Fireball - halfback',
     description: 'Можешь кинуть 5 огненных шаров. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4034,7 +4030,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: Fireball - forward',
     description: 'Можешь кинуть 9 огненных шаров. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4045,7 +4041,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4055,7 +4051,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: Fireball - keeper',
     description: 'Можешь кинуть 2 огненных шара. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4066,7 +4062,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Все мясные/экто тела, щекочущие этого духа на протяжении 2 минут, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4319,7 +4315,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ДУХ: Arr! Ow...',
     description: 'Защита от дистанционного легкого оружия.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4341,7 +4337,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Баргузин невысок, бородат, но сильнее всех богатырей. Одна беда - прям слишком. Без помощи других упирается, да силы тратит.\n\nПока дух с Даром Сармы держит за одну руку тебя, а за другую духа с Даром Култука - у тебя 6 хитов, тяжёлая броня (повяжи на себя красную ленту), когти считаются тяжёлым оружием (повяжи красную ленту на нож), ты можешь кинуть 5 файерболов и не подвержен изгнанию духов (Let it go). Если хотя бы одно из двух рукопожатий распалось - хиты всех трёх духов падают до нуля.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 10,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4352,7 +4348,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Искажён лик Култука болезнями, но как всякая жизнь он себе дорожку находит. Одна беда - увлекается. Без помощи других хватается за разное, елозит туда-сюда, да вперёд почти не движется.\n\nПока дух с Даром Сармы держит за одну руку тебя, а за другую духа с Даром Баргузина - у тебя 6 хитов, тяжёлая броня (повяжи на себя красную ленту), когти считаются тяжёлым оружием (повяжи красную ленту на нож), ты можешь кинуть 5 файерболов и не подвержен изгнанию духов (Let it go). Если хотя бы одно из двух рукопожатий распалось - хиты всех трёх духов падают до нуля.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 10,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -4363,7 +4359,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Сарма все хвори прогоняет, хотела бы всех исцелить. Одна беда - живые вечно снова заболеть норовят. Без помощи других никак ей окончательно этот вопрос не решить.\n\nПока ты держишь одной рукой руку духа с Даром Баргузина, а другой духа с Даром Култука - у тебя 5 хитов, защита от лёгких снарядов и любые духи, что тебя касаются, пропев "Славное море, священный Байкал, Славный корабль омулёвая бочка" тут же восстановят все хиты. Если хотя бы одно из двух рукопожатий распалось - хиты всех трёх духов падают до нуля.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 10,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
