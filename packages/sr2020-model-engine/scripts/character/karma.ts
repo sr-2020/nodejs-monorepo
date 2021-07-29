@@ -81,3 +81,7 @@ export function buyFeatureForKarma(api: EventModelApi<Sr2020Character>, data: { 
     `Способность "${feature.humanReadableName}" успешно приобретена, списано ${karmaCost} кармы.`,
   );
 }
+
+export function adjustGameKarmaCycleLimit(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
+  api.model.karma.gameLimit += data.amount;
+}
