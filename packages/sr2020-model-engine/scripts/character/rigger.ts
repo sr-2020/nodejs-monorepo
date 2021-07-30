@@ -274,7 +274,7 @@ export function cyberdeckRepairAbility(api: EventModelApi<Sr2020Character>, data
     throw new UserVisibleError('Это ремкомплект для дрона, ремонт не удался.');
   }
 
-  const cyberdeckRepairSkill = api.model.drones.recoverySkill + typedQrData<RepairKitQrData>(api.aquired(QrCode, data.qrCodeId!)).bonus;
+  const cyberdeckRepairSkill = api.workModel.drones.recoverySkill + typedQrData<RepairKitQrData>(api.aquired(QrCode, data.qrCodeId!)).bonus;
   if (cyberdeckRepairSkill < 22) {
     throw new UserVisibleError('Ремонт не удался.');
   }
