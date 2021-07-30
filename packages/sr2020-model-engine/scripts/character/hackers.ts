@@ -65,7 +65,7 @@ export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amo
 
 export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: DumpshockModifier) {
   increaseResonance(api, { ...m, amount: -m.amount });
-  increaseIntelligence(api, { ...m, amount: -m.amount });
+//  increaseIntelligence(api, { ...m, amount: -m.amount });
 }
 
 export function createJackedInEffect(): Effect {
