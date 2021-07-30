@@ -209,6 +209,12 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   const penalty = api.workModel.drones.feedbackModifier;
   api.addModifier(createDroneModifier(drone, data.droneId!, penalty));
+
+  sendNotificationAndHistoryRecord(
+    api,
+    'Вход в дрона',
+    `Вы подключились к дрону. Ваше тело - в телохранилище ${data.bodyStorageId}. Не перепутайте при выходе!`,
+  );
 }
 
 export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

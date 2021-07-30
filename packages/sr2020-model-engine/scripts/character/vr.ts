@@ -67,6 +67,12 @@ export function enterVr(api: EventModelApi<Sr2020Character>, data: ActiveAbility
   });
 
   api.addModifier(createVrModifier());
+
+  sendNotificationAndHistoryRecord(
+    api,
+    'Вход в VR',
+    `Вы вошли в VR. Ваше тело - в телохранилище ${data.bodyStorageId}. Не перепутайте при выходе!`,
+  );
 }
 
 export function exitVr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
