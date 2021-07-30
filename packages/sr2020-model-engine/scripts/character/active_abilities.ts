@@ -159,7 +159,7 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
 export function undienaRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
   const target = api.aquired(Sr2020Character, data.targetCharacterId!);
   reviveOnTarget(api, data);
-  api.sendNotification('Успех', `Способность Undiena успешно применена)`);
+  api.sendNotification('Успех', `Способность Undiena успешно применена`);
 }
 
 export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void) {
