@@ -57,7 +57,7 @@ describe('Karma events', function () {
       data: { id: 'trollton', location: { id: '7', manaLevel: 0 } },
     });
 
-    expect(baseModel.karma.available).toBeCloseTo(1.8, 8);
+    expect(baseModel.karma.available).toBeCloseTo(0, 8);
   });
 
   it('Casting spells gives karma', async () => {
@@ -69,7 +69,7 @@ describe('Karma events', function () {
       data: { id: 'ground-heal', power: 1, location: { id: '7', manaLevel: 0 } },
     });
 
-    expect(baseModel.karma.available).toBe(0.3);
+    expect(baseModel.karma.available).toBe(0);
   });
 
   it('Can not earn more karma than cycle cap', async () => {
