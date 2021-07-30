@@ -13,8 +13,8 @@ import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/chara
 
 export const kMaxKarmaPerGame = 500;
 export const kMaxKarmaPerCycle = 100;
-export const kKarmaActiveAbilityCoefficient = 0.00;
-export const kKarmaSpellCoefficient = 0.00;
+export const kKarmaActiveAbilityCoefficient = 0.0;
+export const kKarmaSpellCoefficient = 0.0;
 export const kPassiveAbilityCoefficient = 0.013;
 
 const kKarmaForPassivesTimerName = 'give-karma-for-passives';
@@ -56,6 +56,10 @@ export function addKarmaGivingTimer(model: Sr2020Character) {
 export function giveKarmaForPassiveAbilities(api: EventModelApi<Sr2020Character>, data: {}) {
   earnKarma(api, { amount: kPassiveAbilityCoefficient * api.model.karma.spent, notify: true });
   addKarmaGivingTimer(api.model);
+}
+
+export function giveKarmaJustBecause(api: EventModelApi<Sr2020Character>, data: {}) {
+  earnKarma(api, { amount: 9 * kPassiveAbilityCoefficient * (api.model.karma.spent - api.model.karma.spentOnPassives), notify: true });
 }
 
 export function buyFeatureForKarma(api: EventModelApi<Sr2020Character>, data: { id: string }) {
