@@ -3893,7 +3893,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
+        allowedTypes: ['CLINICALLY_DEAD_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
