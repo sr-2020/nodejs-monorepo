@@ -255,7 +255,7 @@ export function droneRepairAbility(api: EventModelApi<Sr2020Character>, data: Ac
     throw new UserVisibleError('Это Набор микросхем для кибердеки, ремонт не удался.');
   }
 
-  const droneRepairSkill = api.model.drones.recoverySkill + typedQrData<RepairKitQrData>(api.aquired(QrCode, data.qrCodeId!)).bonus;
+  const droneRepairSkill = api.workModel.drones.recoverySkill + typedQrData<RepairKitQrData>(api.aquired(QrCode, data.qrCodeId!)).bonus;
   if (droneRepairSkill < drone.sensor) {
     throw new UserVisibleError('Ремонт не удался.');
   }
