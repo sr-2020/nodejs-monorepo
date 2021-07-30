@@ -52,6 +52,12 @@ export class CharacterStatsCard extends React.Component<Sr2020Character, { encod
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="0">{this.renderQr()}</Accordion.Collapse>
           </Accordion>
+          <Accordion>
+            <Accordion.Toggle as={WideButton} eventKey="1">
+              Ссылки для отладки
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="1">{this.renderLinks()}</Accordion.Collapse>
+          </Accordion>
           <BasicCharacterStats {...this.props} />
           <MagicCharactersStats magicStats={this.props.magicStats} />
           <HackerCharactersStats hacking={this.props.hacking} />
@@ -68,5 +74,17 @@ export class CharacterStatsCard extends React.Component<Sr2020Character, { encod
   renderQr() {
     if (!this.state.encodedQrCode) return <div>Загрузка...</div>;
     return <QRCode value={this.state.encodedQrCode} size={300} includeMargin={true} />;
+  }
+
+  renderLinks() {
+    return (
+      <div>
+        <a
+          href={`https://console.cloud.google.com/logs/query;query=resource.type%3D%22k8s_container%22%0Aresource.labels.project_id%3D%22imposing-elixir-249711%22%0Aresource.labels.location%3D%22europe-west3-b%22%0Aresource.labels.cluster_name%3D%22prod%22%0Aresource.labels.namespace_name%3D%22production%22%0Alabels.k8s-pod%2Frun%3D%22models-manager%22%20OR%20labels.k8s-pod%2Frun%3D%22push%22%0A${this.props.modelId};timeRange=P1D?project=imposing-elixir-249711`}
+        >
+          Лог действий персонажа и пуш-нотификаций
+        </a>
+      </div>
+    );
   }
 }
