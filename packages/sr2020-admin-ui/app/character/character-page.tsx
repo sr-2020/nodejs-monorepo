@@ -21,6 +21,7 @@ import { EthicsCard } from '@alice/sr2020-admin-ui/app/character/cards/ethics-ca
 import { EssenceCard } from '@alice/sr2020-admin-ui/app/character/cards/essence-card';
 import { CharacterResetCard } from '@alice/sr2020-admin-ui/app/character/cards/character-reset-card';
 import { AdjustKarmaLimit } from '@alice/sr2020-admin-ui/app/character/cards/adjust-karma-limit';
+import { ModifiersCard } from '@alice/sr2020-admin-ui/app/character/cards/modifiers-card';
 
 type SetCharacter = (character: Sr2020Character) => void;
 
@@ -62,6 +63,7 @@ export class LoadedCharacterPage extends React.Component<{ character: Sr2020Char
         <SpellsCard abilities={this.props.character.spells} />
         <ImplantsCard implants={this.props.character.implants} />
         <TimersCard timers={this.props.character.timers} />
+        <ModifiersCard modifiers={this.props.character.modifiers} />
         <CardDeck className="mt-3">
           <AddFeatureCard sendEvent={this.sendEvent} />
         </CardDeck>
