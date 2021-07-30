@@ -52,11 +52,11 @@ describe('Hackers-related events', function () {
     await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
     await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(2); // Damaged by dumpshock
-    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(1); // Damaged by dumpshock
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3); // Damaged by dumpshock
 
     await fixture.sendCharacterEvent(weakCastEvent, '2');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(3); // Healed a bit
-    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(1); // Healed a bit
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3); // Healed a bit
 
     await fixture.sendCharacterEvent(strongCastEvent, '2');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // Not more!
