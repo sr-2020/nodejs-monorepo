@@ -52,6 +52,7 @@ import {
   trackpointer,
   trollton,
   uglyIsPechi,
+  undienaRevive,
   useSpriteAbility,
   wereami,
   whoNeedsIt,
@@ -123,6 +124,7 @@ import {
   enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3903,7 +3905,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: oneTimeRevive.name,
+    eventType: undienaRevive.name,
   },
   // У духа появляется на 3 минуты пассивная абилка avalanche-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
