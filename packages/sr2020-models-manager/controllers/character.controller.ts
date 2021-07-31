@@ -54,26 +54,14 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   }
 
   @Get('/character/update_all')
-  async updateAll(
-    @Query('older_than_seconds', ParseIntPipe) olderThanSeconds: number = 0,
-  ): Promise<{ successes: number; failures: number }> {
+  async updateAll(@Query('older_than_seconds', ParseIntPipe) olderThanSeconds: number = 0): Promise<{ count: number }> {
     const ts = moment().subtract(olderThanSeconds, 'seconds').valueOf();
     const characters = await getRepository(Sr2020Character).createQueryBuilder().where('timestamp < :ts', { ts }).getMany();
-
-    let successes = 0;
-    let failures = 0;
-
     for (const character of characters) {
-      try {
-        await this.get(Number(character.modelId));
-        successes++;
-      } catch (e) {
-        failures++;
-      }
+      await this.get(Number(character.modelId));
     }
-    this.logger.warning(`Update all results: ${successes} successes, ${failures} failures.`);
 
-    return { successes, failures };
+    return { count: characters.length };
   }
 
   @Put('/character/model')
