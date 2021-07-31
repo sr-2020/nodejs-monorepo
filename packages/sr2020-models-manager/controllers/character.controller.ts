@@ -67,8 +67,10 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       try {
         await this.get(Number(character.modelId));
         successes++;
+        this.logger.warning(`Processed model for character ${character.modelId}`);
       } catch (e) {
         failures++;
+        this.logger.warning(`Failed to process model for character ${character.modelId}`);
       }
     }
     this.logger.warning(`Update all results: ${successes} successes, ${failures} failures.`);
