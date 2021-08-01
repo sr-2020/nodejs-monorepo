@@ -124,6 +124,7 @@ import {
   enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+import { divineIntervention } from '@alice/sr2020-model-engine/scripts/character/development';
 
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -4687,6 +4688,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: noItActionAbility.name,
+  },
+  {
+    id: 'divine-intervention',
+    humanReadableName: 'Божественно вмешательство',
+    description: 'Дает 100 кармы, даром, и пусть никто не уйдет обиженный',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 1,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: divineIntervention.name,
   },
 ];
 setAllActiveAbilities(

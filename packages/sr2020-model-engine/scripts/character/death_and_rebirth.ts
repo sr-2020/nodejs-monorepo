@@ -76,7 +76,7 @@ export function reviveAbsoluteOnDigitalTarget(api: EventModelApi<Sr2020Character
 }
 
 export function debugReviveAbsolute(api: EventModelApi<Sr2020Character>, data?: { location?: LocationData }) {
-  throw new UserVisibleError('Нет этой кнопки больше :p Обновите приложение!');
+  return debugReviveAbsoluteSecret(api, data);
 }
 
 export function debugReviveAbsoluteSecret(api: EventModelApi<Sr2020Character>, data?: { location?: LocationData }) {

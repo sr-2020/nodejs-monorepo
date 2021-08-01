@@ -4508,6 +4508,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  {
+    id: 'game-is-over',
+    humanReadableName: 'Игра завершилась',
+    description:
+      '- Все персонажи воскрешены\n-Удалены таймеры голода и вылечены все зависимости\n-В обновленной версии приложения на Google Play снова доступна кнопка самовоскрешения\n-Всем персонажам добавлена активная способность "Божественное вмешательство"',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
 ];
 setAllPassiveAbilities(
   (() => {
