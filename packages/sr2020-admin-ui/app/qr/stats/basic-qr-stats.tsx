@@ -8,7 +8,7 @@ export class BasicQrStatsCard extends React.Component<QrCode, { encodedQrCode: s
   state = { encodedQrCode: '' };
 
   componentDidMount() {
-    const timestamp = Math.round(new Date().getTime() / 1000) + 3600;
+    const timestamp = Math.round(new Date().getTime() / 1000) + 3600000;
     encodeQr({ type: 1, kind: 0, validUntil: timestamp, payload: this.props.modelId }).then((encodedQrCode) =>
       this.setState({ encodedQrCode }),
     );

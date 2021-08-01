@@ -17,7 +17,7 @@ export class CharacterStatsCard extends React.Component<Sr2020Character, { encod
   state = { encodedQrCode: '' };
 
   componentDidMount() {
-    const timestamp = Math.round(new Date().getTime() / 1000) + 3600;
+    const timestamp = Math.round(new Date().getTime() / 1000) + 3600000;
     encodeQr({ type: this.getQrType(this.props), kind: 0, validUntil: timestamp, payload: this.props.modelId }).then((encodedQrCode) =>
       this.setState({ encodedQrCode }),
     );
