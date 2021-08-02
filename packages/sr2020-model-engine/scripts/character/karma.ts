@@ -54,7 +54,7 @@ export function addKarmaGivingTimer(model: Sr2020Character) {
 }
 
 export function giveKarmaForPassiveAbilities(api: EventModelApi<Sr2020Character>, data: {}) {
-  earnKarma(api, { amount: kPassiveAbilityCoefficient * api.model.karma.spent, notify: true });
+  earnKarma(api, { amount: kPassiveAbilityCoefficient * api.model.karma.spent, notify: false });
   addKarmaGivingTimer(api.model);
 }
 
